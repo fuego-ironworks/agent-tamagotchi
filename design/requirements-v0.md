@@ -14,7 +14,9 @@ The goal is a dedicated physical interface for supervising and talking to agents
 
 ## Primary interface: physical keys
 
-Physical keys are the primary interface. A touchscreen is not required and should not be used as a substitute for important controls.
+Physical keys are the primary interface for frequent control actions. A touchscreen is not required for those controls and should not be used as a substitute for them.
+
+The device does **not** need a full physical QWERTY keyboard. An Android-Go-like on-screen keyboard is acceptable for arbitrary text entry. The physical keyboard area should instead be optimized for commands that are used repeatedly while supervising agents or using a terminal.
 
 Desired key feel:
 
@@ -38,9 +40,29 @@ Initial command set to support physically:
 - half-page up / half-page down;
 - projects / task list;
 - back / cancel;
-- blocker / explain what needs attention.
+- blocker / explain what needs attention;
+- terminal;
+- select all visible / active text;
+- copy;
+- paste.
 
 The exact layout is intentionally open. The design should distinguish high-frequency controls by shape, position, or feel rather than requiring visual hunting.
+
+## Terminal and text manipulation
+
+Terminal access is a first-class use case, not a hidden developer feature. A Termux-like terminal or equivalent shell view should be directly accessible from the device interface.
+
+The physical controls should make common terminal and text operations cheap even when arbitrary typing uses the on-screen keyboard. In particular:
+
+- direct terminal key or equally immediate terminal access;
+- page and half-page movement through terminal/chat output;
+- select all text in the active text region or screen where that operation is meaningful;
+- copy selected text;
+- paste clipboard contents;
+- preserve ordinary software selection when finer-grained selection is needed;
+- do not require a touchscreen gesture for the common clipboard operations.
+
+The exact semantics of “select all text on the screen” need to be defined per view. In a terminal it may mean the visible scrollback region or active selection domain; in chat it may mean the currently displayed response or editable input. The interface should avoid destructive ambiguity.
 
 ## Display
 
@@ -48,10 +70,11 @@ Desired behavior:
 
 - always or nearly always readable at a glance;
 - low idle power;
-- suitable for text, job state, short responses, menus, and task lists;
+- suitable for text, job state, short responses, menus, task lists, and terminal output;
 - readable in ordinary room light;
 - does not need to behave like a full-color tablet display;
-- should preserve useful state when the user walks away if the display technology permits that cheaply.
+- should preserve useful state when the user walks away if the display technology permits that cheaply;
+- should refresh quickly enough that terminal scrolling and text selection remain usable.
 
 A monochrome, old-school electronic-toy / Tamagotchi-like visual character is acceptable and potentially desirable.
 
@@ -64,7 +87,7 @@ Candidates to compare later:
 - low-power TFT;
 - fast-refresh e-paper / electrophoretic displays.
 
-E-paper is not assumed to be correct merely because static state persists. Refresh speed, partial-refresh quality, ghosting, cost, power, and practical scrolling behavior need to be compared against other displays.
+E-paper is not assumed to be correct merely because static state persists. Refresh speed, partial-refresh quality, ghosting, cost, power, and practical scrolling behavior need to be compared against other displays. Terminal use makes refresh behavior a stronger requirement than it would be for a status-only device.
 
 ## Voice input
 
@@ -98,9 +121,9 @@ A speaker may be useful for alerts or spoken responses, but is not yet establish
 
 Not chosen.
 
-The device does not automatically need to host the large language model or the full agent runtime locally. Its essential job is the human-facing control surface: display state, accept physical commands and dictation, and communicate with agent services.
+The device does not automatically need to host the large language model or the full agent runtime locally. Its essential job is the human-facing control surface: display state, accept physical commands and dictation, provide terminal/text interaction, and communicate with agent services.
 
-Any processor choice must therefore be justified by concrete requirements such as display handling, audio capture, networking, encryption, local speech recognition, or offline behavior—not by the fact that Lapis One uses a relatively powerful SoC.
+Any processor choice must therefore be justified by concrete requirements such as display handling, terminal rendering, audio capture, networking, encryption, local speech recognition, or offline behavior—not by the fact that Lapis One uses a relatively powerful SoC.
 
 ## Economic constraint
 
@@ -111,7 +134,7 @@ This constraint should drive part selection only after the interface requirement
 ## Design order
 
 1. Establish interaction model and physical controls.
-2. Establish display behavior and minimum useful text area.
+2. Establish display behavior and minimum useful text area, including terminal use.
 3. Establish voice/audio requirements.
 4. Establish networking and power requirements.
 5. Only then shortlist components and prototype platforms.
