@@ -10,7 +10,24 @@ The goal is a dedicated physical interface for supervising and talking to agents
 - Roughly phone to small-tablet scale is acceptable.
 - It may be somewhat larger than the Lapis One.
 - It should be comfortable to leave on a desk and glance at, but still easy to pick up and carry.
-- Thinness is not a primary objective if extra thickness improves keys, battery, acoustics, or repairability.
+- Thinness is not a primary objective if extra thickness improves keys, battery, acoustics, durability, or repairability.
+- It should work as something kept nearby and picked up briefly to inspect jobs, continue work, stop something, or confirm that merges and other actions completed.
+
+## Handling and enclosure
+
+The device should tolerate casual, imperfect handling better than an ordinary glass-front tablet.
+
+Desired handling characteristics:
+
+- usable with wet or dirty hands for the important controls;
+- grippy rather than slippery;
+- some rubber or rubber-like exterior surfaces, bumpers, overmolding, or equivalent treatment are desirable candidates;
+- resistant to minor drops, desk impacts, and being tossed into a bag;
+- important buttons should remain easy to identify and press without precise fingertip placement;
+- the enclosure should not depend on a pristine capacitive touchscreen for core operation;
+- exact ingress-protection or drop-test targets are not yet specified.
+
+The intent is closer to a small durable field controller or electronic toy than to a thin premium phone.
 
 ## Primary interface: physical keys
 
@@ -25,6 +42,8 @@ Desired key feel:
 - enough travel that the press is physically obvious;
 - comfortable for repeated use over long sessions;
 - large enough and well-spaced enough to use by feel;
+- usable when fingers are wet or dirty;
+- tolerant of imprecise presses rather than demanding touchscreen-like accuracy;
 - durable enough for very frequent presses.
 
 Do not choose a switch technology yet. Candidate mechanisms can later include silicone-rubber domes, scissor mechanisms, low-profile mechanical switches, or other key structures that meet the feel requirement.
