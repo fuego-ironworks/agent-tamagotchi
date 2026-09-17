@@ -83,6 +83,59 @@ The physical controls should make common terminal and text operations cheap even
 
 The exact semantics of “select all text on the screen” need to be defined per view. In a terminal it may mean the visible scrollback region or active selection domain; in chat it may mean the currently displayed response or editable input. The interface should avoid destructive ambiguity.
 
+## Local storage and durable conversation state
+
+Local storage is a first-class requirement rather than merely firmware storage.
+
+The device should retain enough conversation, job, and terminal state locally that the user can move rapidly between work items without depending on immediate re-fetch from a network service.
+
+Desired behavior:
+
+- removable microSD storage is desirable, with internal flash used for the operating system and essential state;
+- conversation text and metadata that pass through the Tamagotchi client should be cached locally in a durable, inspectable form;
+- terminal transcripts, job receipts, status changes, user commands, and agent responses should be retainable locally;
+- local history should survive network loss and ordinary application restarts;
+- the device should make it easy to return to the exact work item and position that was active previously;
+- storage formats should avoid unnecessary lock-in and should be recoverable without the original UI where practical;
+- durable local storage is separate from any cloud service's own conversation history.
+
+A local cache must not be described as a complete mirror of ChatGPT or another service unless that service actually exposes enough data to synchronize it. The baseline guarantee is to retain what the Tamagotchi itself sees and sends; richer synchronization can be added where upstream interfaces permit it.
+
+## Work queue and rapid handoff
+
+The normal workflow assumes the user often gives one response and immediately moves to the next queued item while earlier work continues.
+
+The device should therefore maintain a local work queue and make advancing through it cheap.
+
+Useful queue states include:
+
+- ready for user input;
+- running;
+- waiting on an external job or check;
+- blocked / needs explanation;
+- failed;
+- completed but not yet reviewed;
+- completed and acknowledged.
+
+After sending a response, the default interaction should be able to advance directly to the next item that needs useful human attention rather than leaving the user parked on the submitted conversation.
+
+Queue ordering should be locally inspectable and should not require the model to decide every transition. Simple deterministic ordering, recency, explicit priority, and status can provide the baseline.
+
+## Local filtering and triage
+
+Some filtering should be possible locally so the device does not merely reproduce every remote event verbatim.
+
+Start with deterministic filtering where possible, for example:
+
+- collapse repeated progress messages;
+- surface jobs that changed from running to failed, blocked, or completed;
+- preserve the first meaningful failure while allowing verbose logs to remain available underneath;
+- distinguish items that need a user decision from items that are merely still running;
+- group or suppress duplicate notifications;
+- retain raw receipts even when the visible queue shows a shorter summary.
+
+Small local-model or classifier assistance may later be useful for ranking, summarizing, or routing queue items, but it is optional. Local filtering must not destroy the original conversation or receipt data, and a lower-compute deterministic path should remain available.
+
 ## Display
 
 Desired behavior:
@@ -140,9 +193,9 @@ A speaker may be useful for alerts or spoken responses, but is not yet establish
 
 Not chosen.
 
-The device does not automatically need to host the large language model or the full agent runtime locally. Its essential job is the human-facing control surface: display state, accept physical commands and dictation, provide terminal/text interaction, and communicate with agent services.
+The device does not automatically need to host the large language model or the full agent runtime locally. Its essential job is the human-facing control surface: display state, accept physical commands and dictation, provide terminal/text interaction, maintain local durable state and a work queue, perform lightweight filtering, and communicate with agent services.
 
-Any processor choice must therefore be justified by concrete requirements such as display handling, terminal rendering, audio capture, networking, encryption, local speech recognition, or offline behavior—not by the fact that Lapis One uses a relatively powerful SoC.
+Any processor choice must therefore be justified by concrete requirements such as display handling, terminal rendering, storage indexing, queue/filtering behavior, audio capture, networking, encryption, local speech recognition, or offline behavior—not by the fact that Lapis One uses a relatively powerful SoC.
 
 ## Economic constraint
 
@@ -154,6 +207,7 @@ This constraint should drive part selection only after the interface requirement
 
 1. Establish interaction model and physical controls.
 2. Establish display behavior and minimum useful text area, including terminal use.
-3. Establish voice/audio requirements.
-4. Establish networking and power requirements.
-5. Only then shortlist components and prototype platforms.
+3. Establish local storage, queue, and filtering behavior.
+4. Establish voice/audio requirements.
+5. Establish networking and power requirements.
+6. Only then shortlist components and prototype platforms.
